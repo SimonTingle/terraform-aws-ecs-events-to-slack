@@ -37,4 +37,4 @@ USER 2323
 
 
 ENTRYPOINT [ "/usr/bin/python3", "-m", "awslambdaric" ]
-CMD [ "slack_notifications.lambda_handler" ]
+CMD [ "slack_notifications.lambda_handler" ]# Triggering fresh PR
