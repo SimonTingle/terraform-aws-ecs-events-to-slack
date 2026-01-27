@@ -1,5 +1,5 @@
 locals {
-  # Create a result map of all built-in event rules and given custom rules.
+  
   event_rules = merge(
     var.enable_ecs_task_state_event_rule ? {
       ECSTaskStateChange = {
@@ -40,20 +40,6 @@ resource "aws_cloudwatch_event_rule" "this" {
   tags = var.tags
 }
 
-resource "aws_ecr_repository" "lambda_repo" {
-  name                 = var.ecr_repo_name
-  image_tag_mutability = "IMMUTABLE" 
-
-  image_scanning_configuration {
-    scan_on_push = true 
-  }
-
-  
-  encryption_configuration {
-    encryption_type = "KMS"
-  }
-}
-
 resource "aws_cloudwatch_event_target" "this" {
   for_each = local.event_rules
 
@@ -74,9 +60,8 @@ module "slack_notifications" {
 
   create_package = false
   package_type   = "Image"
-  
-  image_uri = "${aws_ecr_repository.lambda_repo.repository_url}:${var.image_version}"
-  
+
+  image_uri = var.image_uri
 
   recreate_missing_package = var.recreate_missing_package
 
