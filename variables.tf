@@ -7,6 +7,12 @@ variable "name" {
   type        = string
 }
 
+variable "image_version" {
+  description = "The ECR image tag to deploy (e.g., v1.0.0)"
+  type        = string
+  default     = "v0.1.1"
+}
+
 variable "slack_webhook_url" {
   description = <<EOT
   (default) A Slack incoming webhook URL. 
@@ -120,8 +126,21 @@ variable "lambda_memory_size" {
   type        = number
   default     = 256
 }
+
+variable "github_repo" {
+  description = "The GitHub repository in format 'org/repo'"
+  type        = string
+  default     = "simon-tingle/terraform-aws-ecs-events-to-slack"
+}
+
 variable "recreate_missing_package" {
   description = "Whether to recreate missing Lambda package"
   type        = bool
   default     = true
+}
+
+variable "ecr_repo_name" {
+  description = "Name of the ECR repository"
+  type        = string
+  default     = "ecs-events-to-slack-repo"
 }
