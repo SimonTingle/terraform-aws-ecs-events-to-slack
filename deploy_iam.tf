@@ -1,5 +1,4 @@
 # The OIDC provider is assumed to exist in the account already.
-# We reference it by constructing the ARN standard for GitHub.
 data "aws_iam_openid_connect_provider" "github" {
   url = "https://token.actions.githubusercontent.com"
 }
@@ -18,6 +17,7 @@ resource "aws_iam_role" "github_ci_role" {
         Action = "sts:AssumeRoleWithWebIdentity"
         Condition = {
           StringLike = {
+            # Strictly scope to your repository to prevent cross-repo role assumption
             "token.actions.githubusercontent.com:sub" = "repo:${var.github_repo}:*"
             "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
           }
@@ -35,9 +35,11 @@ resource "aws_iam_role_policy" "ecr_push_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid      = "GetAuthorizationToken"
-        Effect   = "Allow"
-        Action   = "ecr:GetAuthorizationToken"
+        Sid    = "GetAuthorizationToken"
+        Effect = "Allow"
+        Action = "ecr:GetAuthorizationToken"
+        # TFSec ignore: ecr:GetAuthorizationToken does not support resource-level permissions
+        # tfsec:ignore:aws-iam-no-policy-wildcards
         Resource = "*"
       },
       {
