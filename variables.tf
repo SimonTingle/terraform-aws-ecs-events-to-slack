@@ -17,7 +17,7 @@ variable "slack_webhook_url" {
 }
 
 variable "image_uri" {
-  description = "The ECR image URI to deploy. This should be provided by the internal CI/CD process."
+  description = "The ECR image URI to deploy (e.g., 123456789012.dkr.ecr.us-east-1.amazonaws.com/repo:tag)."
   type        = string
   default     = null
 }
