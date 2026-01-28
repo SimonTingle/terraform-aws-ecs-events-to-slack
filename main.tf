@@ -58,10 +58,11 @@ module "slack_notifications" {
   lambda_role   = var.lambda_role
   description   = "Receive events from EventBridge and send them to Slack"
 
-  create_package = false
-  package_type   = "Image"
-
-  image_uri = var.image_uri
+  
+  source_path = "${path.module}/functions/"
+  handler     = "slack_notifications.lambda_handler"
+  runtime     = "python3.11"
+ 
 
   recreate_missing_package = var.recreate_missing_package
 
