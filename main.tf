@@ -52,16 +52,19 @@ module "slack_notifications" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "8.2.0"
 
+  # NEW: Switch to Docker Mode
+  create_package = false
+  package_type   = "Image"
+
+  image_uri      = "${aws_ecr_repository.lambda_repo.repository_url}:${var.image_version}"
+
   function_name = var.name
   role_name     = var.role_name
   create_role   = var.create_role
   lambda_role   = var.lambda_role
   description   = "Receive events from EventBridge and send them to Slack"
 
-  
-  source_path = "${path.module}/functions/"
-  handler     = "slack_notifications.lambda_handler"
-  runtime     = "python3.11"
+  # source_path, handler, runtime, recreate_missing_package are all REMOVED
  
 
   recreate_missing_package = var.recreate_missing_package

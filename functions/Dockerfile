@@ -1,4 +1,4 @@
-FROM python:3.11-slim AS builder
+FROM python:3.10 AS builder
 WORKDIR /app
 
 
@@ -37,4 +37,4 @@ USER 2323
 
 
 ENTRYPOINT [ "/usr/bin/python3", "-m", "awslambdaric" ]
-CMD [ "slack_notifications.lambda_handler" ]# Triggering fresh PR
+CMD [ "slack_notifications.lambda_handler" ]

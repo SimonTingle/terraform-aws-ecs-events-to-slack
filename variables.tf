@@ -16,12 +16,6 @@ variable "slack_webhook_url" {
   type        = string
 }
 
-variable "image_uri" {
-  description = "The ECR image URI to deploy (e.g., 123456789012.dkr.ecr.us-east-1.amazonaws.com/repo:tag)."
-  type        = string
-  default     = null
-}
-
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS
 # ---------------------------------------------------------------------------------------------------------------------
@@ -129,4 +123,10 @@ variable "recreate_missing_package" {
   description = "Whether to recreate missing Lambda package"
   type        = bool
   default     = true
+}
+
+variable "image_version" {
+  description = "The tag of the container image to deploy (e.g. v0.1.0)"
+  type        = string
+  default     = "v0.1.0"
 }
