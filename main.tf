@@ -53,6 +53,10 @@ resource "aws_cloudwatch_event_target" "this" {
 module "slack_notifications" {
   source  = "terraform-aws-modules/lambda/aws"
   # NOTE: Migration testing required to ensure backward compatibility.
+  # --- UPDATED: v7.0.0 -> v8.2.0 per FivexL Hardening standards. ---
+  # NOTE PER ANTON (2026-01-29): Migration must be tested for backward compatibility. 
+  # We will deploy v7.0.0 first and upgrade to v8.2.0 (target release 1.0.0) 
+  # to ensure no unexpected resource replacements or bugs occur.
   version = "8.2.0"
 
   # --- DOCKER LOGIC PUT AWAY PER ANTON (2026-01-29) ---
