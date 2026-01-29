@@ -1,5 +1,6 @@
 locals {
-  
+  # Create a result map of all built-in event rules and given custom rules.
+
   event_rules = merge(
     var.enable_ecs_task_state_event_rule ? {
       ECSTaskStateChange = {
@@ -51,12 +52,11 @@ resource "aws_cloudwatch_event_target" "this" {
 
 module "slack_notifications" {
   source  = "terraform-aws-modules/lambda/aws"
+  # NOTE: Migration testing required to ensure backward compatibility.
   version = "8.2.0"
 
-  # --- TEMPORARILY PUT AWAY PER ANTON (2026-01-29) ---
-  # Reason: ECR/OIDC access will be provided via a different repo tomorrow.
-  # We are commenting these out to prevent validation errors until then.
-
+  # --- DOCKER LOGIC PUT AWAY PER ANTON (2026-01-29) ---
+  # This code will be moved to the infrastructure repo tomorrow.
   # create_package = false
   # package_type   = "Image"
   # image_uri      = "${aws_ecr_repository.lambda_repo.repository_url}:${var.image_version}"

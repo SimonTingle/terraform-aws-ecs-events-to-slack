@@ -39,10 +39,15 @@ jobs:
       #     push: true
       #     tags: ${{ steps.login-ecr.outputs.registry }}/ecs-events-to-slack-repo:${{ github.event.release.tag_name }}
 
-      - name: Build, tag, and push image to Amazon ECR
-        uses: docker/build-push-action@v6
-        with:
-          context: ./functions
-          file: ./functions/Dockerfile
-          push: true
-          tags: ${{ steps.login-ecr.outputs.registry }}/ecs-events-to-slack-repo:${{ steps.tag.outputs.image_tag }}
+      # - name: Build, tag, and push image to Amazon ECR
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: ./functions
+      #     file: ./functions/Dockerfile
+      #     push: true
+      #     tags: ${{ steps.login-ecr.outputs.registry }}/ecs-events-to-slack-repo:${{ steps.tag.outputs.image_tag }}
+
+      # --- PUTTING AWAY PER ANTON (2026-01-29) ---
+      # Reason: AWS access and ECR repo destination are being redefined tomorrow.
+      # To prevent "broken reference" errors, we are commenting out all steps 
+      # dependent on the ECR Login and OIDC permissions.
