@@ -3,12 +3,13 @@ name: Build and Push Docker Image
 on:
   release:
     types: [published]
-  # Manual trigger removed or kept empty to force reliance on release tags
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
+# --- PUTTING AWAY PER ANTON (2026-01-29) ---
+# Reason: OIDC permissions will be handled via a different repository tomorrow.
+# permissions:
+#   id-token: write
+#   contents: read
 
 jobs:
   build-and-push:
@@ -17,24 +18,26 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v6
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-ci-ecr-push-role
-          aws-region: eu-central-1
+      # --- PUTTING AWAY PER ANTON (2026-01-29) ---
+      # Reason: AWS Credential and ECR logic is being moved/reconfigured tomorrow.
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-ci-ecr-push-role
+      #     aws-region: eu-central-1
 
-      - name: Build, tag, and push image to Amazon ECR
-        uses: docker/build-push-action@v6
-        with:
-          context: ./functions
-          file: ./functions/Dockerfile
-          push: true
-          # Directly use the release tag from context
-          tags: ${{ steps.login-ecr.outputs.registry }}/ecs-events-to-slack-repo:${{ github.event.release.tag_name }}
+      # - name: Login to Amazon ECR
+      #   id: login-ecr
+      #   uses: aws-actions/amazon-ecr-login@v2
+
+      # - name: Build, tag, and push image to Amazon ECR
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: ./functions
+      #     file: ./functions/Dockerfile
+      #     push: true
+      #     tags: ${{ steps.login-ecr.outputs.registry }}/ecs-events-to-slack-repo:${{ github.event.release.tag_name }}
 
       - name: Build, tag, and push image to Amazon ECR
         uses: docker/build-push-action@v6

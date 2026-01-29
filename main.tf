@@ -40,6 +40,7 @@ resource "aws_cloudwatch_event_rule" "this" {
   tags = var.tags
 }
 
+
 resource "aws_cloudwatch_event_target" "this" {
   for_each = local.event_rules
 
@@ -52,11 +53,15 @@ module "slack_notifications" {
   source  = "terraform-aws-modules/lambda/aws"
   version = "8.2.0"
 
-  # NEW: Switch to Docker Mode
-  create_package = false
-  package_type   = "Image"
+  # --- TEMPORARILY PUT AWAY PER ANTON (2026-01-29) ---
+  # Reason: ECR/OIDC access will be provided via a different repo tomorrow.
+  # We are commenting these out to prevent validation errors until then.
 
-  image_uri      = "${aws_ecr_repository.lambda_repo.repository_url}:${var.image_version}"
+  # create_package = false
+  # package_type   = "Image"
+  # image_uri      = "${aws_ecr_repository.lambda_repo.repository_url}:${var.image_version}"
+
+  # --- END OF "PUT AWAY" SECTION ---
 
   function_name = var.name
   role_name     = var.role_name
@@ -65,8 +70,9 @@ module "slack_notifications" {
   description   = "Receive events from EventBridge and send them to Slack"
 
   # source_path, handler, runtime, recreate_missing_package are all REMOVED
- 
-
+  # REASON: Code is now encapsulated within the Docker image as per FivexL Hardening Part 2: Build Constraints.
+  # REASON: Both handler and runtime are now defined within the OCI-compliant image
+  # REASON: Package recreation is now handled by the CI/CD container build pipeline
   recreate_missing_package = var.recreate_missing_package
 
   timeout = 30
