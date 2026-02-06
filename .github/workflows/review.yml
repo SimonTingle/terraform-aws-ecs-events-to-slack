@@ -1,4 +1,5 @@
 name: Update review branch
+
 on:
   workflow_dispatch:
 
@@ -10,8 +11,14 @@ jobs:
   review:
     name: Review
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Update review branch
+      id: update-review
+      run: |
+        git push origin main:review
